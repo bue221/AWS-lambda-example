@@ -1,0 +1,42 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Resources:
+  WebhookFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: app.lambda_handler
+      Runtime: python3.9
+      CodeUri: webhook/
+      Environment:
+        Variables:
+          DB_HOST: 127.0.0.1
+          DB_USER: root
+          DB_PASSWORD: wildchild94
+          DB_NAME: webhook_db
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /webhook
+            Method: POST
+
+  WorkerFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: app.lambda_handler
+      Runtime: python3.9
+      CodeUri: worker/
+      Environment:
+        Variables:
+          DB_HOST: 127.0.0.1
+          DB_USER: root
+          DB_PASSWORD: tu_password
+          DB_NAME: webhook_db
+      Events:
+        SQSEvent:
+          Type: SQS
+          Properties:
+            Queue: !GetAtt MessageQueue.Arn
+
+  MessageQueue:
+    Type: AWS::SQS::Queue
