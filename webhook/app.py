@@ -11,7 +11,7 @@ db_config = {
 }
 
 sqs = boto3.client("sqs")
-QUEUE_URL = "https://sqs.us-east-1.amazonaws.com/123456789012/YourQueueName"
+QUEUE_URL = "https://sqs.us-east-2.amazonaws.com/503561430900/testSpot2.fifo"
 
 
 def lambda_handler(event, context):
